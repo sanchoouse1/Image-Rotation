@@ -2,6 +2,7 @@
 import NavBar from "./components/NavBar.vue";
 import ImageComponent from "./components/ImageComponent.vue"
 import ModalEdit from "./components/ModalEdit.vue"
+import { ref } from 'vue';
 
 export default {
     components: {
@@ -9,7 +10,16 @@ export default {
     },
 
     setup() {
+        let rad = ref(0) // из localStorage 
 
+        function updateRotation(rotation) {
+            console.log('updateRotation');
+            rad.value = (rotation * Math.PI) / 180;
+            localStorage.setItem('radValue', rad.value);
+            // console.log(rotation, rad.value);
+        }
+
+        return { updateRotation, rad }
     }
 }
 
@@ -21,9 +31,9 @@ export default {
     <!-- Колонка для меню, в которой будет кнопка "Редактировать, вызывающая модальное окно" -->
     <nav-bar/>
     <!-- Тут будет изображение на главной странице -->
-    <image-component/>
+    <image-component :rad="rad"/>
     <!-- Тут будет модальное окно -->
-    <modal-edit/>
+    <modal-edit @updateRotation="updateRotation"/>
 </div>
 </template>
 
