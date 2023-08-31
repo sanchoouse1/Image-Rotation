@@ -1,30 +1,53 @@
+<script>
+import NavBar from "./components/NavBar.vue";
+import ImageComponent from "./components/ImageComponent.vue"
+import ModalEdit from "./components/ModalEdit.vue"
+
+export default {
+    components: {
+        NavBar, ImageComponent, ModalEdit
+    },
+
+    setup() {
+
+    }
+}
+
+
+</script>
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+<div class="h-100 w-100 p-0">
+    <!-- Колонка для меню, в которой будет кнопка "Редактировать, вызывающая модальное окно" -->
+    <nav-bar/>
+    <!-- Тут будет изображение на главной странице -->
+    <image-component/>
+    <!-- Тут будет модальное окно -->
+    <modal-edit/>
+</div>
 </template>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app{
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: "Montserrat";
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-nav {
-  padding: 30px;
-}
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
