@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 import { ref, onMounted } from 'vue';
 
 export default ({
@@ -9,15 +9,20 @@ export default ({
     emits: ['updateRotation'],
 
     setup(_, {emit}) {
-        const canvas = ref(null);
+        const canvas = ref<HTMLCanvasElement | null>(null);
         const image = new Image(); // Создание нового объекта изображения
         image.src = require('@/assets/desktop.jpg') // Путь к изображению которое необходимо нанести на холст
         let rotation = 0;
 
         onMounted(() => {
             image.onload = () => {
-                canvas.value.width = 480;
-                canvas.value.height = 320;
+                const savedRadValue = localStorage.getItem('radValue')
+                if (savedRadValue !== null) {
+                  rotateImage((parseFloat(savedRadValue) * 180) / Math.PI ) // перевёл обратно в градусы
+                  console.log('EE')
+                }
+                canvas.value!.width = 480;
+                canvas.value!.height = 320;
                 drawImage();
             };
         });
@@ -26,21 +31,21 @@ export default ({
         const drawImage = () => {
             if (canvas.value) {
                 const ctx = canvas.value.getContext('2d');
-                ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
-                ctx.save();
-                ctx.translate(canvas.value.width / 2, canvas.value.height / 2); // установка центра вращения
-                ctx.rotate((rotation * Math.PI) / 180); // вращение в РАДИАНАХ
+                ctx!.clearRect(0, 0, canvas.value.width, canvas.value.height);
+                ctx!.save();
+                ctx!.translate(canvas.value.width / 2, canvas.value.height / 2); // установка центра вращения
+                ctx!.rotate((rotation * Math.PI) / 180); // вращение в РАДИАНАХ
                 const scaleFactor = Math.min(
                     canvas.value.width / image.width,
                     canvas.value.height / image.height
                 );
-                ctx.scale(scaleFactor, scaleFactor);
-                ctx.drawImage(image, -image.width / 2, -image.height / 2); // отцентровка изображения
-                ctx.restore();
+                ctx!.scale(scaleFactor, scaleFactor);
+                ctx!.drawImage(image, -image.width / 2, -image.height / 2); // отцентровка изображения
+                ctx!.restore();
             }
         }
 
-        const rotateImage = (angle) => {
+        const rotateImage = (angle: number) => {
             rotation = (rotation + angle) % 360;
             drawImage();
         }
@@ -49,7 +54,7 @@ export default ({
             emit('updateRotation', rotation);
         }
 
-        return { canvas, rotateImage, saveRotation }
+        return { canvas, rotateImage, saveRotation };
     }
 })
 </script>

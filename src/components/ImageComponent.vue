@@ -1,5 +1,5 @@
 <script>
-import { ref, watch, nextTick, onMounted } from 'vue';
+import { ref, watch, watchEffect, nextTick, onMounted } from 'vue';
 
 export default ({
     components: {
@@ -22,12 +22,14 @@ export default ({
             })
         });
 
+
         const radians = ref(0);
         const canvas = ref(null);
         const image = new Image(); // Создание нового объекта изображения
         image.src = require('@/assets/desktop.jpg') // Путь к изображению которое необходимо нанести на холст
 
 
+        // Монтировка отрабатывает корректно при перезагрузке страницы
         onMounted(() => {
             const savedRadValue = localStorage.getItem('radValue');
             if (savedRadValue !== null) {
