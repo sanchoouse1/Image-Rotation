@@ -12,7 +12,7 @@ export default ({
       }
     },
 
-    setup(props: { rad: number }) {
+    setup(props: any) {
         const radians = ref<number>(0);
         const canvas = ref<HTMLCanvasElement | null>(null);
         const image = new Image(); // Создание нового объекта изображения

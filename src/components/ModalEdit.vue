@@ -8,7 +8,7 @@ export default ({
 
     emits: ['updateRotation'],
 
-    setup(_, {emit}) {
+    setup(_: any, {emit}: any) {
         const canvas = ref<HTMLCanvasElement | null>(null);
         const image = new Image(); // Создание нового объекта изображения
         image.src = require('@/assets/desktop.jpg') // Путь к изображению которое необходимо нанести на холст
