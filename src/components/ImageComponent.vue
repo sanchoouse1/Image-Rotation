@@ -1,5 +1,5 @@
-<script>
-import { ref, watch, watchEffect, nextTick, onMounted } from 'vue';
+<script lang="ts">
+import { ref, watch, nextTick, onMounted } from 'vue';
 
 export default ({
     components: {
@@ -8,25 +8,23 @@ export default ({
     props: {
       rad: {
           type: Number,
-          required: true
+          default: null,
       }
     },
 
-    setup(props) {
+    setup(props: { rad: number }) {
+        const radians = ref<number>(0);
+        const canvas = ref<HTMLCanvasElement | null>(null);
+        const image = new Image(); // Создание нового объекта изображения
+        image.src = require('@/assets/desktop.jpg') // Путь к изображению которое необходимо нанести на холст
+
         watch(() => props.rad, (newValue, oldValue) => {
             nextTick(()=> {
                 radians.value = newValue;
                 console.log('watch сработал')
-                // console.log('FKDLSFKL:', radians.value)
                 drawImage();
             })
         });
-
-
-        const radians = ref(0);
-        const canvas = ref(null);
-        const image = new Image(); // Создание нового объекта изображения
-        image.src = require('@/assets/desktop.jpg') // Путь к изображению которое необходимо нанести на холст
 
 
         // Монтировка отрабатывает корректно при перезагрузке страницы
@@ -35,9 +33,10 @@ export default ({
             if (savedRadValue !== null) {
                 radians.value = parseFloat(savedRadValue);
             }
+            console.log(`При монтировании компонента ImageComponent.vue, radians.value = ${radians.value}`)
             image.onload = () => {
-                canvas.value.width = 900;
-                canvas.value.height = 600;
+                canvas.value!.width = 900;
+                canvas.value!.height = 600;
                 drawImage();
             };
         });
@@ -46,17 +45,17 @@ export default ({
         const drawImage = () => {
             if (canvas.value) {
                 const ctx = canvas.value.getContext('2d');
-                ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
-                ctx.save();
-                ctx.translate(canvas.value.width / 2, canvas.value.height / 2); // установка центра вращения
-                ctx.rotate(radians.value); // вращение в РАДИАНАХ
+                ctx!.clearRect(0, 0, canvas.value.width, canvas.value.height);
+                ctx!.save();
+                ctx!.translate(canvas.value.width / 2, canvas.value.height / 2); // установка центра вращения
+                ctx!.rotate(radians.value); // вращение в РАДИАНАХ
                 const scaleFactor = Math.min(
                     canvas.value.width / image.width,
                     canvas.value.height / image.height
                 );
-                ctx.scale(scaleFactor, scaleFactor);
-                ctx.drawImage(image, -image.width / 2, -image.height / 2); // отцентровка изображения
-                ctx.restore();
+                ctx!.scale(scaleFactor, scaleFactor);
+                ctx!.drawImage(image, -image.width / 2, -image.height / 2); // отцентровка изображения
+                ctx!.restore();
             }
         }
 

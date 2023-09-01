@@ -11,11 +11,12 @@ export default defineComponent ({
     },
 
     setup() {
-        const rad = ref<number>(0) // из localStorage
+        const rad = ref<number | null>(null) // из localStorage
 
         function updateRotation(rotation: number) {
-          console.log('updateRotation in App.vue')
+          console.log('updateRotation in App.vue; rotation = ', rotation)
           rad.value = (rotation * Math.PI) / 180;
+          console.log(`rad.value = ${rad.value}`)
           localStorage.setItem('radValue', rad.value.toString());
         }
 
@@ -31,7 +32,7 @@ export default defineComponent ({
     <!-- Колонка для меню, кнопка "Редактировать, вызывающая модальное окно" -->
     <nav-bar/>
     <!-- изображение на главной странице -->
-    <image-component :rad="rad"/>
+    <image-component :rad="rad !== null ? rad : undefined"/>
     <!-- модальное окно -->
     <modal-edit @updateRotation="updateRotation"/>
 </div>

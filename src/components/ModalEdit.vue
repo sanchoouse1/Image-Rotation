@@ -18,7 +18,8 @@ export default ({
             image.onload = () => {
                 const savedRadValue = localStorage.getItem('radValue')
                 if (savedRadValue !== null) {
-                  rotateImage((parseFloat(savedRadValue) * 180) / Math.PI ) // перевёл обратно в градусы
+                  const radians = parseFloat(savedRadValue);
+                  rotateImage((radians * 180) / Math.PI ) // перевёл обратно в градусы
                   console.log('EE')
                 }
                 canvas.value!.width = 480;
